@@ -1,13 +1,13 @@
-\contentsline {chapter}{\numberline {1}{\ignorespaces Card Making\relax }}{13}{}%
-\contentsline {chapter}{\numberline {2}{\ignorespaces Fun Photography\relax }}{15}{}%
-\contentsline {chapter}{\numberline {3}{\ignorespaces Welcome Drinks\relax }}{18}{}%
-\contentsline {chapter}{\numberline {4}{\ignorespaces Musical Chairs\relax }}{21}{}%
-\contentsline {chapter}{\numberline {5}{\ignorespaces Tambola\relax }}{24}{}%
-\contentsline {chapter}{\numberline {6}{\ignorespaces Paper Dance\relax }}{27}{}%
-\contentsline {chapter}{\numberline {7}{\ignorespaces Balloon Bursting\relax }}{30}{}%
-\contentsline {chapter}{\numberline {8}{\ignorespaces Talent Show\relax }}{34}{}%
-\contentsline {chapter}{\numberline {9}{\ignorespaces Food\relax }}{37}{}%
-\contentsline {chapter}{\numberline {10}{\ignorespaces DJ\relax }}{40}{}%
-\contentsline {chapter}{\numberline {11}{\ignorespaces Bonfire\relax }}{43}{}%
-\contentsline {chapter}{\numberline {12}{\ignorespaces Fire Crackers Show\relax }}{46}{}%
-\contentsline {chapter}{\numberline {13}{\ignorespaces Happy New Year\relax }}{49}{}%
+\contentsline {chapter}{\numberline {1}{\ignorespaces Card Making\relax }}{20}{}%
+\contentsline {chapter}{\numberline {2}{\ignorespaces Fun Photography\relax }}{22}{}%
+\contentsline {chapter}{\numberline {3}{\ignorespaces Welcome Drinks\relax }}{25}{}%
+\contentsline {chapter}{\numberline {4}{\ignorespaces Musical Chairs\relax }}{28}{}%
+\contentsline {chapter}{\numberline {5}{\ignorespaces Tambola\relax }}{31}{}%
+\contentsline {chapter}{\numberline {6}{\ignorespaces Paper Dance\relax }}{34}{}%
+\contentsline {chapter}{\numberline {7}{\ignorespaces Balloon Bursting\relax }}{37}{}%
+\contentsline {chapter}{\numberline {8}{\ignorespaces Talent Show\relax }}{41}{}%
+\contentsline {chapter}{\numberline {9}{\ignorespaces Food\relax }}{46}{}%
+\contentsline {chapter}{\numberline {10}{\ignorespaces DJ\relax }}{49}{}%
+\contentsline {chapter}{\numberline {11}{\ignorespaces Bonfire\relax }}{52}{}%
+\contentsline {chapter}{\numberline {12}{\ignorespaces Fire Crackers Show\relax }}{55}{}%
+\contentsline {chapter}{\numberline {13}{\ignorespaces Happy New Year\relax }}{58}{}%

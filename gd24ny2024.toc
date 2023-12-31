@@ -6,8 +6,8 @@
 \contentsline {chapter}{\chapternumberline {6}Paper Dance}{10}{chapter.6}%
 \contentsline {chapter}{\chapternumberline {7}Balloon Bursting}{11}{chapter.7}%
 \contentsline {chapter}{\chapternumberline {8}Talent Show}{14}{chapter.8}%
-\contentsline {chapter}{\chapternumberline {9}Food}{16}{chapter.9}%
-\contentsline {chapter}{\chapternumberline {10}DJ}{18}{chapter.10}%
-\contentsline {chapter}{\chapternumberline {11}Bonfire}{20}{chapter.11}%
-\contentsline {chapter}{\chapternumberline {12}Fire Crackers Show}{22}{chapter.12}%
-\contentsline {chapter}{\chapternumberline {13}Happy New Year}{25}{chapter.13}%
+\contentsline {chapter}{\chapternumberline {9}Food}{18}{chapter.9}%
+\contentsline {chapter}{\chapternumberline {10}DJ}{20}{chapter.10}%
+\contentsline {chapter}{\chapternumberline {11}Bonfire}{22}{chapter.11}%
+\contentsline {chapter}{\chapternumberline {12}Fire Crackers Show}{24}{chapter.12}%
+\contentsline {chapter}{\chapternumberline {13}Happy New Year}{27}{chapter.13}%
