@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="UTF-8" />
+<meta name="author" content="��������� �����" />
+<meta name="generator" content="LaTeX Lwarp package" />
+<meta name="description" content="Ram Leela @ G24 )" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!--[if lt IE 9]>
+<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<title> Ram Leela @ G24</title>
+<link rel="stylesheet" type="text/css" href="lwarp_sagebrush.css" />
+
+<script>
+// Lwarp MathJax emulation code
+//
+// Based on code by Davide P. Cervone.
+// Equation numbering: https://github.com/mathjax/MathJax/issues/2427
+// Starred and ifnextchar macros: https://github.com/mathjax/MathJax/issues/2428
+// \left, \right delimiters: https://github.com/mathjax/MathJax/issues/2535
+//
+// Modified by Brian Dunn to adjust equation numbering and add subequations.
+//
+// LaTeX can use \seteqnumber{subequations?}{section}{number} before each equation.
+// subequations? is 0 usually, 1 if inside subequations.
+// section is a string printed as-is, or empty.
+// number is auto-incremented by MathJax between equations.
+//
+MathJax = {
+  subequations: "0",
+  section: "",
+  loader: {
+    load: ['[tex]/tagformat', '[tex]/textmacros'],
+  },
+  startup: {
+    ready() {
+      // These would be replaced by import commands if you wanted to make
+      // a proper extension.
+      const Configuration = MathJax._.input.tex.Configuration.Configuration;
+      const CommandMap = MathJax._.input.tex.SymbolMap.CommandMap;
+      const Macro = MathJax._.input.tex.Symbol.Macro;
+      const TexError = MathJax._.input.tex.TexError.default;
+      const ParseUtil = MathJax._.input.tex.ParseUtil.default;
+      const expandable = MathJax._.util.Options.expandable;
+
+       // Insert the replacement string into the TeX string, and check
+       // that there haven't been too many maxro substitutions (prevents
+       // infinite loops).
+       const useArgument = (parser, text) => {
+         parser.string = ParseUtil.addArgs(parser, text, parser.string.slice(parser.i));
+         parser.i = 0;
+         if (++parser.macroCount > parser.configuration.options.maxMacros) {
+           throw new TexError('MaxMacroSub1',
+           'MathJax maximum macro substitution count exceeded; ' +
+           'is there a recursive macro call?');
+         }
+       }
+
+       // Create the command map for:
+       //     \ifstar, \ifnextchar, \ifblank, \ifstrequal, \gsub, \seteqnumber
+       new CommandMap('Lwarp-macros', {
+         ifstar: 'IfstarFunction',
+         ifnextchar: 'IfnextcharFunction',
+         ifblank: 'IfblankFunction',
+         ifstrequal: 'IfstrequalFunction',
+         gsubstitute: 'GsubstituteFunction',
+         seteqnumber: 'SeteqnumberFunction'
+       }, {
+         // This function implements an ifstar macro.
+         IfstarFunction(parser, name) {
+            const resultstar = parser.GetArgument(name);
+            const resultnostar = parser.GetArgument(name);
+            const star = parser.GetStar();                 // true if there is a *
+            useArgument(parser, star ? resultstar : resultnostar);
+         },
+
+         // This function implements an ifnextchar macro.
+         IfnextcharFunction(parser, name) {
+           let whichchar = parser.GetArgument(name);
+           if (whichchar.match(/^(?:0x[0-9A-F]+|[0-9]+)$/i)) {
+             // $ syntax highlighting
+             whichchar = String.fromCodePoint(parseInt(whichchar));
+           }
+           const resultnextchar = parser.GetArgument(name);
+           const resultnotnextchar = parser.GetArgument(name);
+           const gotchar = (parser.GetNext() === whichchar);
+           useArgument(parser, gotchar ? resultnextchar : resultnotnextchar);
+         },
+
+         // This function implements an ifblank macro.
+         IfblankFunction(parser, name) {
+           const blankarg = parser.GetArgument(name);
+           const resultblank = parser.GetArgument(name);
+           const resultnotblank = parser.GetArgument(name);
+           const isblank = (blankarg.trim() == "");
+           useArgument(parser, isblank ? resultblank : resultnotblank);
+         },
+
+         // This function implements an ifstrequal macro.
+         IfstrequalFunction(parser, name) {
+           const strequalfirst = parser.GetArgument(name);
+           const strequalsecond = parser.GetArgument(name);
+           const resultequal = parser.GetArgument(name);
+           const resultnotequal = parser.GetArgument(name);
+           const isequal = (strequalfirst == strequalsecond);
+           useArgument(parser, isequal ? resultequal : resultnotequal);
+         },
+
+         // This function implements a gsub macro.
+         GsubstituteFunction(parser, name) {
+           const gsubfirst = parser.GetArgument(name);
+           const gsubsecond = parser.GetArgument(name);
+           const gsubthird = parser.GetArgument(name);
+           let gsubresult=gsubfirst.replace(gsubsecond, gsubthird);
+           useArgument(parser, gsubresult);
+         },
+
+         // This function modifies the equation numbers.
+         SeteqnumberFunction(parser, name) {
+             // Get the macro parameters
+             const star = parser.GetStar();                  // true if there is a *
+             const optBrackets = parser.GetBrackets(name);   // contents of optional brackets
+             const newsubequations = parser.GetArgument(name); // the subequations argument
+             const neweqsection = parser.GetArgument(name); // the eq section argument
+             const neweqnumber = parser.GetArgument(name);   // the eq number argument
+             MathJax.config.subequations=newsubequations ;   // a string with boolean meaning
+             MathJax.config.section=neweqsection ;           // a string with numeric meaning
+             parser.tags.counter = parser.tags.allCounter = neweqnumber ;
+         }
+
+       });
+
+       // Create the Lwarp-macros package
+       Configuration.create('Lwarp-macros', {
+         handler: {macro: ['Lwarp-macros']}
+       });
+
+       MathJax.startup.defaultReady();
+
+       // For forward references:
+       MathJax.startup.input[0].preFilters.add(({math}) => {
+         if (math.inputData.recompile){
+             MathJax.config.subequations = math.inputData.recompile.subequations;
+             MathJax.config.section = math.inputData.recompile.section;
+         }
+       });
+       MathJax.startup.input[0].postFilters.add(({math}) => {
+         if (math.inputData.recompile){
+             math.inputData.recompile.subequations = MathJax.config.subequations;
+             math.inputData.recompile.section = MathJax.config.section;
+         }
+       });
+
+         // For \left, \right with unicode-math:
+         const {DelimiterMap} = MathJax._.input.tex.SymbolMap;
+         const {Symbol} = MathJax._.input.tex.Symbol;
+         const {MapHandler} = MathJax._.input.tex.MapHandler;
+         const delimiter = MapHandler.getMap('delimiter');
+         delimiter.add('\\lBrack', new Symbol('\\lBrack', '\u27E6'));
+         delimiter.add('\\rBrack', new Symbol('\\rBrack', '\u27E7'));
+         delimiter.add('\\lAngle', new Symbol('\\lAngle', '\u27EA'));
+         delimiter.add('\\rAngle', new Symbol('\\rAngle', '\u27EB'));
+         delimiter.add('\\lbrbrak', new Symbol('\\lbrbrak', '\u2772'));
+         delimiter.add('\\rbrbrak', new Symbol('\\rbrbrak', '\u2773'));
+         delimiter.add('\\lbag', new Symbol('\\lbag', '\u27C5'));
+         delimiter.add('\\rbag', new Symbol('\\rbag', '\u27C6'));
+         delimiter.add('\\llparenthesis', new Symbol('\\llparenthesis', '\u2987'));
+         delimiter.add('\\rrparenthesis', new Symbol('\\rrparenthesis', '\u2988'));
+         delimiter.add('\\llangle', new Symbol('\\llangle', '\u2989'));
+         delimiter.add('\\rrangle', new Symbol('\\rrangle', '\u298A'));
+         delimiter.add('\\Lbrbrak', new Symbol('\\Lbrbrak', '\u27EC'));
+         delimiter.add('\\Rbrbrak', new Symbol('\\Rbrbrak', '\u27ED'));
+         delimiter.add('\\lBrace', new Symbol('\\lBrace', '\u2983'));
+         delimiter.add('\\rBrace', new Symbol('\\rBrace', '\u2984'));
+         delimiter.add('\\lParen', new Symbol('\\lParen', '\u2985'));
+         delimiter.add('\\rParen', new Symbol('\\rParen', '\u2986'));
+         delimiter.add('\\lbrackubar', new Symbol('\\lbrackubar', '\u298B'));
+         delimiter.add('\\rbrackubar', new Symbol('\\rbrackubar', '\u298C'));
+         delimiter.add('\\lbrackultick', new Symbol('\\lbrackultick', '\u298D'));
+         delimiter.add('\\rbracklrtick', new Symbol('\\rbracklrtick', '\u298E'));
+         delimiter.add('\\lbracklltick', new Symbol('\\lbracklltick', '\u298F'));
+         delimiter.add('\\rbrackurtick', new Symbol('\\rbrackurtick', '\u2990'));
+         delimiter.add('\\langledot', new Symbol('\\langledot', '\u2991'));
+         delimiter.add('\\rangledot', new Symbol('\\rangledot', '\u2992'));
+         delimiter.add('\\lparenless', new Symbol('\\lparenless', '\u2993'));
+         delimiter.add('\\rparengtr', new Symbol('\\rparengtr', '\u2994'));
+         delimiter.add('\\Lparengtr', new Symbol('\\Lparengtr', '\u2995'));
+         delimiter.add('\\Rparenless', new Symbol('\\Rparenless', '\u2996'));
+         delimiter.add('\\lblkbrbrak', new Symbol('\\lblkbrbrak', '\u2997'));
+         delimiter.add('\\rblkbrbrak', new Symbol('\\rblkbrbrak', '\u2998'));
+         delimiter.add('\\lvzigzag', new Symbol('\\lvzigzag', '\u29D8'));
+         delimiter.add('\\rvzigzag', new Symbol('\\rvzigzag', '\u29D9'));
+         delimiter.add('\\Lvzigzag', new Symbol('\\Lvzigzag', '\u29DA'));
+         delimiter.add('\\Rvzigzag', new Symbol('\\Rvzigzag', '\u29DB'));
+         delimiter.add('\\lcurvyangle', new Symbol('\\lcurvyangle', '\u29FC'));
+         delimiter.add('\\rcurvyangle', new Symbol('\\rcurvyangle', '\u29FD'));
+         delimiter.add('\\Vvert', new Symbol('\\Vvert', '\u2980'));
+   }     // ready
+ },      // startup
+
+ tex: {
+   packages: {'[+]': ['tagformat', 'Lwarp-macros', 'textmacros']},
+   tags: "ams",
+        tagformat: {
+            number: function (n) {
+                if(MathJax.config.subequations==0)
+                     return(MathJax.config.section + n);
+                else
+                     return(MathJax.config.section + String.fromCharCode(96+n));
+            },
+        },
+ }
+}
+</script>
+
+<script
+    id="MathJax-script"
+    src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"
+></script>
+
+</head>
+<body>
+
+
+<div class="bodywithoutsidetoc">
+
+
+<main class="bodycontainer">
+
+
+<section class="textbody">
+
+<a id="prachin-autofile-0"></a>
+
+<!--MathJax customizations:-->
+
+
+<div class="hidden">
+
+\(\newcommand{\footnotename}{footnote}\)
+
+\(\def \LWRfootnote {1}\)
+
+\(\newcommand {\footnote }[2][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\newcommand {\footnotemark }[1][\LWRfootnote ]{{}^{\mathrm {#1}}}\)
+
+\(\let \LWRorighspace \hspace \)
+
+\(\renewcommand {\hspace }{\ifstar \LWRorighspace \LWRorighspace }\)
+
+\(\newcommand {\mathnormal }[1]{{#1}}\)
+
+\(\newcommand \ensuremath [1]{#1}\)
+
+\(\newcommand {\LWRframebox }[2][]{\fbox {#2}} \newcommand {\framebox }[1][]{\LWRframebox } \)
+
+\(\newcommand {\setlength }[2]{}\)
+
+\(\newcommand {\addtolength }[2]{}\)
+
+\(\newcommand {\setcounter }[2]{}\)
+
+\(\newcommand {\addtocounter }[2]{}\)
+
+\(\newcommand {\arabic }[1]{}\)
+
+\(\newcommand {\number }[1]{}\)
+
+\(\newcommand {\noalign }[1]{\text {#1}\notag \\}\)
+
+\(\newcommand {\cline }[1]{}\)
+
+\(\newcommand {\directlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\luatexdirectlua }[1]{\text {(directlua)}}\)
+
+\(\newcommand {\protect }{}\)
+
+\(\def \LWRabsorbnumber #1 {}\)
+
+\(\def \LWRabsorbquotenumber &quot;#1 {}\)
+
+\(\newcommand {\LWRabsorboption }[1][]{}\)
+
+\(\newcommand {\LWRabsorbtwooptions }[1][]{\LWRabsorboption }\)
+
+\(\def \mathchar {\ifnextchar &quot;\LWRabsorbquotenumber \LWRabsorbnumber }\)
+
+\(\def \mathcode #1={\mathchar }\)
+
+\(\let \delcode \mathcode \)
+
+\(\let \delimiter \mathchar \)
+
+\(\def \oe {\unicode {x0153}}\)
+
+\(\def \OE {\unicode {x0152}}\)
+
+\(\def \ae {\unicode {x00E6}}\)
+
+\(\def \AE {\unicode {x00C6}}\)
+
+\(\def \aa {\unicode {x00E5}}\)
+
+\(\def \AA {\unicode {x00C5}}\)
+
+\(\def \o {\unicode {x00F8}}\)
+
+\(\def \O {\unicode {x00D8}}\)
+
+\(\def \l {\unicode {x0142}}\)
+
+\(\def \L {\unicode {x0141}}\)
+
+\(\def \ss {\unicode {x00DF}}\)
+
+\(\def \SS {\unicode {x1E9E}}\)
+
+\(\def \dag {\unicode {x2020}}\)
+
+\(\def \ddag {\unicode {x2021}}\)
+
+\(\def \P {\unicode {x00B6}}\)
+
+\(\def \copyright {\unicode {x00A9}}\)
+
+\(\def \pounds {\unicode {x00A3}}\)
+
+\(\let \LWRref \ref \)
+
+\(\renewcommand {\ref }{\ifstar \LWRref \LWRref }\)
+
+\( \newcommand {\multicolumn }[3]{#3}\)
+
+\(\require {textcomp}\)
+
+\(\newcommand {\toprule }[1][]{\hline }\)
+
+\(\let \midrule \toprule \)
+
+\(\let \bottomrule \toprule \)
+
+\(\def \LWRbooktabscmidruleparen (#1)#2{}\)
+
+\(\newcommand {\LWRbooktabscmidrulenoparen }[1]{}\)
+
+\(\newcommand {\cmidrule }[1][]{\ifnextchar (\LWRbooktabscmidruleparen \LWRbooktabscmidrulenoparen }\)
+
+\(\newcommand {\morecmidrules }{}\)
+
+\(\newcommand {\specialrule }[3]{\hline }\)
+
+\(\newcommand {\addlinespace }[1][]{}\)
+
+\(\def \LWRpagenote {1}\)
+
+\(\newcommand {\pagenote }[2][\LWRpagenote ]{{}^{\mathrm {#1}}}\)
+
+</div>
+
+<a id="prachin-autopage-1"></a>
+<div class="center">
+
+<p>
+
+<a href="front.svg" target="_blank" ><img
+    src="front.svg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+
+<p>
+<a href="ga.gif" target="_blank" ><img
+    src="ga.gif"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+<!--
+...... chapter ���������� ......
+-->
+<h3 id="autosec-3">अनुक्रमणिका</h3>
+<a id="prachin-autopage-3"></a>
+
+
+
+<nav class="toc">
+
+<p>
+<a href="index-0.html#autosec-4" class="tocchapter" >
+<span class="sectionnumber">1</span>&#x2003;प्राक्कथन</a>
+</p>
+
+
+<p>
+<a href="index-0.html#autosec-7" class="tocchapter" >
+<span class="sectionnumber">2</span>&#x2003;बालकाण्ड</a>
+</p>
+
+
+<p>
+<a href="index-0.html#autosec-10" class="tocchapter" >
+<span class="sectionnumber">3</span>&#x2003;अयोध्याकाण्ड</a>
+</p>
+
+
+<p>
+<a href="index-0.html#autosec-13" class="tocchapter" >
+<span class="sectionnumber">4</span>&#x2003;अरण्यकाण्ड</a>
+</p>
+
+
+<p>
+<a href="index-0.html#autosec-16" class="tocchapter" >
+<span class="sectionnumber">5</span>&#x2003;किष्कन्धाकाण्ड</a>
+</p>
+
+
+<p>
+<a href="index-0.html#autosec-19" class="tocchapter" >
+<span class="sectionnumber">6</span>&#x2003;सुन्दरकाण्ड</a>
+</p>
+
+
+<p>
+<a href="index-0.html#autosec-22" class="tocchapter" >
+<span class="sectionnumber">7</span>&#x2003;लंकाकाण्ड</a>
+</p>
+
+<p>
+<a href="index-0.html#autosec-25" class="tocchapter" >
+<span class="sectionnumber">8</span>&#x2003;उत्तरकाण्ड</a>
+</p>
+</nav>
+
+<h3 id="autosec-4">अध्याय&nbsp;<span class="sectionnumber">1&#x2003;</span>प्राक्कथन</h3>
+<a id="ramleela-autopage-4"></a>
+
+
+<p>
+<span style="width:14pt; display:inline-block"><!----></span> तन्त्र में ऊर्ध्वरित मन्त्रोच्चारण मात्र से किञ्चित मात्र भी हेतु की उपलब्धि नहीं हो पाती है। बाह्यडम्बर मात्र से यान्त्रिक गतिविधियों की मिथ्या पूर्ति की अभिसूचना मात्र होती है। अन्तःनिहित भाव से ही प्राण स्फुरण प्रक्रिया प्रारम्भ हो सकती है। उदाहरणतः बीज में वृक्षादि सूक्ष्म रूप से विद्यमान होते हैं। तत्नुसार तन्त्र विद्या के बीज मन्त्र में भी समस्त गुह्य क्रियाएँ सन्निहित हैं।  बीज के समयोचित एवं सुनियोजित अंकुरण व पोषण से कालान्तर में समस्त वृक्ष की उत्पत्ति होती है। उपयुक्त काल में फूल भी खिलते हैं एवं फलों से भी वृक्ष सुशोभित होता है। तदनुसार बीज मन्त्र के समुचित आवाहन से चैतन्य स्फुरण की प्रक्रिया स्वःघटित होती है एवं साधक का मेरुदण्ड स्वर्णिक आभा से आलोकित व सुशोभित होता है। कस्तूरी मृग की नाभि स्थित सदृश अविचल वायु की समस्त क्रियाएँ इन्हीं बीज मन्त्रों के प्रारूप में जीव में गुह्य संगठित हैं, जिनके अनवरत अभ्यास से साधकगण अघोर प्राणायामी पद को प्राप्त हो जाते हैं।   
+</p>
+<div class="center">
+
+<p>
+ नित्यानित्यवस्तुविचारादनित्यसंसारसुखदुःख विषयसमस्तक्षेत्र ममताबन्धक्षयो मोक्षः ॥
+</p>
+</div>
+
+<p>
+जब नित्य-अनित्य वस्तुओं के विषय में विचार करने से नश्वर संसार के सुख-दुःखात्मक समस्त विषयों से ममतारूपी बन्धन का विनाश हो जाये, तब ऐसी अवस्था को मोक्ष की संज्ञा दी गयी है। 
+</p>
+
+<p>
+फलाकांक्षा से विमुक्त होकर क्रिया की परावस्था में पड़े रहना ही मोक्षावस्था है। 
+</p>
+
+<p>
+क्रिया के समुचित व अनवरत अभ्यास से साधक गूढ़ प्राणायाम में पारंगत होकर अविचल स्थिर वायु की अद्भुत अवस्था को प्राप्त हो जाते हैं।  स्थिर वायु नाभि स्थल से प्रारम्भ होकर कूटस्थ त्रिनेत्र में समाहित हो जाती है, तदनुरूप साधक मन्त्र की गूढ़ावस्था चैतन्य स्वरुप में परिवर्तन प्रक्रिया का आत्मसाक्षी बन जाता है।  यही क्रिया की परावस्था अर्थात् मोक्षावस्था है।    
+</p>
+
+<p>
+उदाहरणार्थ बीज मंत्र <b>क्रीं</b> के शब्द-विच्छेद द्वारा तीन अक्षर प्रकट होते हैं : <b>क</b> अर्थात् मस्तक का शीर्ष भाग सहस्रार, <b>र</b> अर्थात् अग्निबीज आज्ञा नेत्र एवं <b>इ</b> अर्थात् शक्ति स्वरुपा प्राण प्रकृति। 
+</p>
+
+<p>
+तदनुसार बीज मंत्र <b>राम</b> में ॐकार स्पन्दन है। 
+</p>
+
+<p>
+<b>राम = रा (स्थिर प्राणवायु से व्युत्पन्न अन्तःज्योति) + म (ॐकार प्रकाश अनाहत नाद) </b> 
+</p>
+<div class="center">
+
+<p>
+रम्यते अनेन इति रामः।<br />
+जो आनंद सिंधु सुखरासी। सीकर तें त्रैलोक सुपासी॥<br />
+सो सुखधाम राम अस नामा। अखिल लोक दायक बिश्रामा॥ 
+</p>
+</div>
+
+<p>
+ॐकार की दिव्य ध्वनि चहुँ दिशा में गुंजायमान हो रही है तथा साधक परलौकिक आनंद से विभोर एवं सराबोर है। वो ॐकार से एकाकार हो जाता है।
+</p>
+
+<p>
+<b>'राम' पारलौकिक दिव्य अविचल प्राण वायु है। </b> 
+</p>
+
+<p>
+<b>'लक्ष्मण' कूटस्थ लक्ष्य की ओर केंद्रित प्राण वायु है। </b> 
+</p>
+
+<p>
+<b>कूटस्थित अवस्था यानि प्राण प्रतिष्ठा ही 'सीता' है।</b>
+</p>
+
+<p>
+जब इड़ा, पिंगला एवं सुषुम्ना नाड़ियों में प्राण वायु का प्रवाह थम जाता है तब साधक एक अनिर्वचनीय दिव्यानंदावस्था में स्थित हो जाता है। 
+</p>
+
+<p>
+उसके अलौकिक दिव्य कम्पन से आच्छादित त्रिनेत्र में भगवान श्रीराम, लक्ष्मण एवं माँ सीता एकछत्र स्थापित हो जाते हैं।
+</p>
+
+<p>
+अर्थात् प्राणायाम के सघन अभ्यास द्वारा चञ्चल प्राणवायु रूपी प्रकृति शक्ति ऊर्ध्वगामी होकर मस्तक अवस्थित कूटस्थ त्रिनेत्र में अविचल स्थिर हो जाती है। इस अवस्था में साधक को अनाहत चक्र के माध्यम से सतत् गुँजायमान ॐकार ध्वनि का दिव्य श्रवण एवं आज्ञा चक्र के माध्यम से बिन्दु के स्थिर स्वरुप का अलौकिक दिव्य दर्शन होता है।    
+</p>
+
+<!--
+...... chapter �������� ......
+-->
+<h3 id="autosec-7">अध्याय&nbsp;<span class="sectionnumber">1&#x2003;</span>बालकाण्ड</h3>
+<a id="prachin-autopage-7"></a>
+
+
+<p>
+<span style="width:14pt; display:inline-block"><!----></span>अयोध्या नगरी में दशरथ नाम के राजा हुये जिनकी कौशल्या, कैकेयी और सुमित्रा नामक पत्नियाँ थीं। संतान प्राप्ति हेतु अयोध्यापति दशरथ ने अपने गुरु श्री वशिष्ठ की आज्ञा से पुत्रकामेष्टि यज्ञ करवाया जिसे कि ऋंगी ऋषि ने सम्पन्न किया। भक्तिपूर्ण आहुतियाँ पाकर अग्निदेव प्रसन्न हुये और उन्होंने स्वयं प्रकट होकर राजा दशरथ को हविष्यपात्र (खीर, पायस) दिया जिसे कि उन्होंने अपनी तीनों पत्नियों में बाँट दिया। खीर के सेवन के परिणामस्वरूप कौशल्या के गर्भ से राम का, कैकेयी के गर्भ से भरत का तथा सुमित्रा के गर्भ से लक्ष्मण और शत्रुघ्न का जन्म हुआ।
+</p>
+
+<p>
+राजकुमारों के बड़े होने पर आश्रम की राक्षसों से रक्षा हेतु ऋषि विश्वामित्र राजा दशरथ से राम और लक्ष्मण को मांग कर अपने साथ ले गये। 
+</p>
+<div class="center">
+
+<p>
+
+<a href="Rama_Killing_Demon_Tataka.jpeg" target="_blank" ><img
+    src="Rama_Killing_Demon_Tataka.jpeg"
+
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+
+<p>
+राम ने ताड़का और सुबाहु जैसे राक्षसों को मार डाला और मारीच को बिना फर वाले बाण से मार कर समुद्र के पार भेज दिया। 
+</p>
+
+<p>
+उधर लक्ष्मण ने राक्षसों की सारी सेना का संहार कर डाला। धनुषयज्ञ हेतु राजा जनक के निमंत्रण मिलने पर विश्वामित्र राम और लक्ष्मण के साथ उनकी नगरी मिथिला (जनकपुर) आ गये।
+</p>
+
+<p>
+ रास्ते में राम ने गौतम मुनि की स्त्री अहल्या का उद्धार किया। मिथिला में राजा जनक की पुत्री सीता जिन्हें कि जानकी के नाम से भी जाना जाता है का स्वयंवर का भी आयोजन था जहाँ कि जनकप्रतिज्ञा के अनुसार शिवधनुष को तोड़ कर राम ने सीता से किया। राम और सीता के विवाह के साथ ही साथ गुरु वशिष्ठ और गुरु विश्वामित्र के परामर्श से भरत का माण्डवी से, लक्ष्मण का उर्मिला से और शत्रुघ्न का श्रुतकीर्ति से विवाह संपन्न किया गया। 
+</p>
+<div class="center">
+
+<p>
+
+<a href="Ravi_Varma-Rama-breaking-bow.jpg" target="_blank" ><img
+    src="Ravi_Varma-Rama-breaking-bow.jpg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+<!--
+...... chapter ������������ ......
+-->
+<h3 id="autosec-10">अध्याय&nbsp;<span class="sectionnumber">2&#x2003;</span>अयोध्याकाण्ड</h3>
+<a id="prachin-autopage-10"></a>
+
+
+<p>
+<span style="width:14pt; display:inline-block"><!----></span>राम के विवाह के कुछ समय पश्चात् राजा दशरथ ने राम का राज्याभिषेक करना चाहा। इस पर देवता लोगों को चिंता हुई कि राम को राज्य मिल जाने पर रावण का वध असम्भव हो जायेगा। व्याकुल होकर उन्होंने देवी सरस्वती से किसी प्रकार के उपाय करने की प्रार्थना की। सरस्वती ने मन्थरा, जो कि कैकेयी की दासी थी, की बुद्धि को फेर दिया। मन्थरा की सलाह से कैकेयी कोपभवन में चली गई। 
+</p>
+<div class="center">
+
+<p>
+
+<a href="Kaikeyi_vilap.jpg" target="_blank" ><img
+    src="Kaikeyi_vilap.jpg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+
+<p>
+दशरथ जब मनाने आये तो कैकेयी ने उनसे वरदान मांगे कि भरत को राजा बनाया जाये और राम को चौदह वर्षों के लिये वनवास में भेज दिया जाये।
+</p>
+
+<p>
+राम के साथ सीता और लक्ष्मण भी वन चले गये। ऋंगवेरपुर में निषादराज गुह ने तीनों की बहुत सेवा की। कुछ आनाकानी करने के बाद केवट ने तीनों को गंगा नदी के पार उतारा| प्रयाग पहुँच कर राम ने भरद्वाज मुनि से भेंट की। वहाँ से राम यमुना स्नान करते हुए वाल्मीकि ऋषि के आश्रम पहुँचे। वाल्मीकि से हुई मन्त्रणा के अनुसार राम, सीता और लक्ष्मण चित्रकूट में निवास करने लगे।
+</p>
+<div class="center">
+
+<p>
+
+<a href="Sree_Rama_Crossing_Sarayu_river.jpg" target="_blank" ><img
+    src="Sree_Rama_Crossing_Sarayu_river.jpg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+
+<p>
+अयोध्या में पुत्र के वियोग के कारण दशरथ का स्वर्गवास हो गया। वशिष्ठ ने भरत और शत्रुघ्न को उनके ननिहाल से बुलवा लिया। वापस आने पर भरत ने अपनी माता कैकेयी की, उसकी कुटिलता के लिये, बहुत भर्तस्ना की और गुरुजनों के आज्ञानुसार दशरथ की अन्त्येष्टि क्रिया कर दिया। भरत ने अयोध्या के राज्य को अस्वीकार कर दिया और राम को मना कर वापस लाने के लिये समस्त स्नेहीजनों के साथ चित्रकूट चले गये। कैकेयी को भी अपने किये पर अत्यंत पश्चाताप हुआ। सीता के माता-पिता सुनयना एवं जनक भी चित्रकूट पहुँचे। भरत तथा अन्य सभी लोगों ने राम के वापस अयोध्या जाकर राज्य करने का प्रस्ताव रखा जिसे कि राम ने, पिता की आज्ञा पालन करने और रघुवंश की रीति निभाने के लिये, अमान्य कर दिया।
+</p>
+
+<p>
+भरत अपने स्नेही जनों के साथ राम की पादुका को साथ लेकर वापस अयोध्या आ गये। उन्होंने राम की पादुका को राज सिंहासन पर विराजित कर दिया स्वयं नन्दिग्राम में निवास करने लगे। 
+</p>
+<!--
+...... chapter ���������� ......
+-->
+<h3 id="autosec-13">अध्याय&nbsp;<span class="sectionnumber">3&#x2003;</span>अरण्यकाण्ड</h3>
+<a id="prachin-autopage-13"></a>
+
+
+<p>
+कुछ काल के पश्चात राम ने चित्रकूट से प्रयाण किया तथा वे अत्रि ऋषि के आश्रम पहुंचे। अत्रि ने राम की स्तुति की और उनकी पत्नी अनसूया ने सीता को पातिव्रत धर्म के मर्म समझाये। 
+</p>
+<div class="center">
+
+<p>
+
+<a href="Rama_Fights_the_Demons.jpg" target="_blank" ><img
+    src="Rama_Fights_the_Demons.jpg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+
+<p>
+वहां से फिर राम ने आगे प्रस्थान किया और शरभंग मुनि से भेंट की। शरभंग मुनि केवल राम के दर्शन की कामना से वहां निवास कर रहे थे अतः राम के दर्शनों की अपनी अभिलाषा पूर्ण हो जाने से योगाग्नि से अपने शरीर को जला डाला और ब्रह्मलोक को गमन किया। और आगे बढ़ने पर राम को स्थान स्थान पर हड्डियों के ढेर दिखाई पड़े जिनके विषय में मुनियों ने राम को बताया कि राक्षसों ने अनेक मुनियों को खा डाला है और उन्हीं मुनियों की हड्डियां हैं। इस पर राम ने प्रतिज्ञा की कि वे समस्त राक्षसों का वध करके पृथ्वी को राक्षस विहीन कर देंगे। राम और आगे बढ़े और पथ में सुतीक्ष्ण, अगस्त्य आदि ऋषियों से भेंट करते हुए दण्डक वन में प्रवेश किया जहां पर उनकी भेंट जटायु से हुई। राम ने पंचवटी को अपना निवास स्थान बनाया।
+</p>
+<div class="center">
+
+<p>
+
+<a href="Ravi_Varma-Ravana_Sita_Jathayu.jpg" target="_blank" ><img
+    src="Ravi_Varma-Ravana_Sita_Jathayu.jpg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+
+<p>
+पंचवटी में रावण की बहन शूर्पणखा ने आकर राम से प्रणय निवेदन-किया। राम ने यह कह कर कि वे अपनी पत्नी के साथ हैं और उनका छोटा भाई अकेला है उसे लक्ष्मण के पास भेज दिया। लक्ष्मण ने उसके प्रणय-निवेदन को अस्वीकार करते हुए शत्रु की बहन जान कर उसके नाक और कान काट लिये। शूर्पणखा ने खर-दूषण से सहायता की मांग की और वह अपनी सेना के साथ लड़ने के लिये आ गया। लड़ाई में राम ने खर-दूषण और उसकी सेना का संहार कर डाला। शूर्पणखा ने जाकर अपने भाई रावण से शिकायत की। रावण ने बदला लेने के लिये मारीच को स्वर्णमृग बना कर भेजा जिसकी छाल की मांग सीता ने राम से की। लक्ष्मण को सीता के रक्षा की आज्ञा दे कर राम स्वर्णमृग रूपी मारीच को मारने के लिये उसके पीछे चले गये। मारीच राम के हाथों मारा गया पर मरते मरते मारीच ने राम की आवाज बना कर 'हे लक्ष्मण' का क्रन्दन किया जिसे सुन कर सीता ने आशंकावश होकर लक्ष्मण को राम के पास भेज दिया। लक्ष्मण के जाने के बाद अकेली सीता का रावण ने छलपूर्वक हरण कर लिया और अपने साथ लंका ले गया। रास्ते में जटायु ने सीता को बचाने के लिये रावण से युद्ध किया और रावण ने उसके पंख काटकर उसे अधमरा कर दिया।
+</p>
+
+<p>
+सीता को न पा कर राम अत्यंत दुखी हुए और विलाप करने लगे। रास्ते में जटायु से भेंट होने पर उसने राम को रावण के द्वारा अपनी दुर्दशा होने व सीता को हर कर दक्षिण दिशा की ओर ले जाने की बात बताई। ये सब बताने के बाद जटायु ने अपने प्राण त्याग दिये और राम उसका अंतिम संस्कार करके सीता की खोज में सघन वन के भीतर आगे बढ़े। रास्ते में राम ने दुर्वासा के शाप के कारण राक्षस बने गन्धर्व कबन्ध का वध करके उसका उद्धार किया और शबरी के आश्रम जा पहुंचे जहां पर कि उसके द्वारा दिये गये जूठे बेरों को उसके भक्ति के वश में होकर खाया| इस प्रकार राम सीता की खोज में सघन वन के अंदर आगे बढ़ते गये। 
+</p>
+<!--
+...... chapter ��������������� ......
+-->
+<h3 id="autosec-16">अध्याय&nbsp;<span class="sectionnumber">4&#x2003;</span>किष्किन्धाकाण्ड</h3>
+<a id="prachin-autopage-16"></a>
+
+
+<p>
+<span style="width:14pt; display:inline-block"><!----></span>श्री राम ऋष्यमूक पर्वत के निकट आ गये। उस पर्वत पर अपने मंत्रियों सहित सुग्रीव रहता था। सुग्रीव ने, इस आशंका में कि कहीं बालि ने उसे मारने के लिये उन दोनों वीरों को न भेजा हो, हनुमान को श्री राम और लक्ष्मण के विषय में जानकारी लेने के लिये ब्राह्मण के रूप में भेजा। यह जानने के बाद कि उन्हें बालि ने नहीं भेजा है हनुमान ने श्री राम और सुग्रीव में मित्रता करवा दी। 
+</p>
+<div class="center">
+
+<p>
+
+<a href="Rama_Meets_Sugreeva.jpg" target="_blank" ><img
+    src="Rama_Meets_Sugreeva.jpg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+
+<p>
+सुग्रीव ने श्री राम को सान्त्वना दी कि जानकी जी मिल जायेंगीं और उन्हें खोजने में वह सहायता देगे। साथ ही अपने भाई बालि के अपने ऊपर किये गये अत्याचार के विषय में बताया। श्री राम ने बालि का वध कर के सुग्रीव को किष्किन्धा का राज्य तथा बालि के पुत्र अंगद को युवराज का पद दे दिया।
+                                                                                                                                                                                                                                      ं द को युवराज का पद दे दया।
+</p>
+
+<p>
+राज्य प्राप्ति के बाद सुग्रीव विलास में लिप्त हो गये और वर्षा तथा शरद् ऋतु बीत गए । राम के नाराजगी पर सुग्रीव ने वानरों को सीता की खोज के लिये भेजा। सीता की खोज में गये वानरों को एक गुफा में एक तपस्विनी के दर्शन हुए। तपस्विनी ने खोज दल को योगशक्ति से समुद्रतट पर पहुँचा दिया जहाँ पर उनकी भेंट सम्पाती से हुई। सम्पाती ने वानरों को बताया कि रावण ने सीता को लंका की अशोकवाटिका में रखा है। जाम्बवन्त ने हनुमान को समुद्र लांघने के लिये कहा किन्तु हनुमान जी इतनी दूर कैसे जाएंगे । तब हनुमान जी ने जाम्बवन्त जी से पुछा कि " मैं इतनी दूर कैसे जा पाऊंगा।" तब जाम्बवन्त जी ने उनकी शक्तियों को याद दिलाया और बताया कि उन्हें श्री भृगुवंशी जी को परेशान करते थे जिससे तंग आकर उन्होंने हनुमान को शाप दे दिया की,"आप अपने बल और तेज को सदा के लिए भूल जाएं लेकिन जब कोई आपको आपकी शक्तियां याद कराएगा तभी आप उसका उपयोग कर सकोगे।" फिर वे आगे बढ़कर उन्होंने अपनी शक्तियों का अहसास किया। 
+</p>
+<div class="center">
+
+<p>
+
+<a href="The_Signet_Ring.jpg" target="_blank" ><img
+    src="The_Signet_Ring.jpg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+<!--
+...... chapter ���������� ......
+-->
+<h3 id="autosec-19">अध्याय&nbsp;<span class="sectionnumber">5&#x2003;</span>सुन्दरकाण्ड</h3>
+<a id="prachin-autopage-19"></a>
+
+
+<p>
+<span style="width:14pt; display:inline-block"><!----></span>हनुमान जी ने लंका की ओर प्रस्थान किया। सुरसा ने हनुमान जी की परीक्षा ली और उसे योग्य तथा सामर्थ्यवान पाकर आशीर्वाद दिया। मार्ग में हनुमान जी ने छाया पकड़ने वाली राक्षसी का वध किया और लंकिनी पर प्रहार करके लंका में प्रवेश किया। उनकी विभीषण से भेंट हुई। जब हनुमान जी अशोकवाटिका में पहुँचे तो रावण सीता को धमका रहा था। रावण के जाने पर त्रिजटा ने सीता को सान्त्वना दी। एकान्त होने पर हनुमान जी ने सीता से भेंट करके उन्हें राम की मुद्रिका दी। 
+</p>
+<div class="center">
+
+<p>
+
+<a href="Hanuman_Encounters_Sita_in_Ashokavana.jpg" target="_blank" ><img
+    src="Hanuman_Encounters_Sita_in_Ashokavana.jpg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+
+<p>
+हनुमान जी ने अशोकवाटिका का विध्वंस करके रावण के पुत्र अक्षय कुमार का वध कर दिया। मेघनाथ हनुमान को नागपाश में बांध कर रावण की सभा में ले गया। रावण के प्रश्न के उत्तर में हनुमान ने अपना परिचय राम के दूत के रूप में दिया। रावण ने हनुमान जी की पूँछ में तेल में डूबा हुआ कपड़ा बांध कर आग लगा दिया इस पर हनुमान जी ने लंका का दहन कर दिया।
+</p>
+<div class="center">
+
+<p>
+
+<a href="Hanuman_Watches_Lanka_Burn.jpg" target="_blank" ><img
+    src="Hanuman_Watches_Lanka_Burn.jpg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+
+<p>
+हनुमान जी सीता के पास पहुँचे। सीता ने अपनी चूड़ामणि दे कर उन्हें विदा किया। वे वापस समुद्र पार आकर सभी वानरों से मिले और सभी वापस सुग्रीव के पास चले गये। हनुमान के कार्य से राम अत्यंत प्रसन्न हुए। राम वानरों की सेना के साथ समुद्रतट पर पहुँचे। उधर विभीषण ने रावण को समझाया कि राम से बैर न लें इस पर रावण ने विभीषण को अपमानित कर लंका से निकाल दिया। विभीषण राम के शरण में आ गया और राम ने उसे लंका का राजा घोषित कर दिया। राम ने समुद्र से रास्ता देने की विनती की। विनती न मानने पर राम ने क्रोध किया और उनके क्रोध से भयभीत होकर समुद्र ने स्वयं आकर राम की विनती करने के पश्चात् नल और नील के द्वारा पुल बनाने का उपाय बताया। 
+</p>
+<!--
+...... chapter ��������� ......
+-->
+<h3 id="autosec-22">अध्याय&nbsp;<span class="sectionnumber">6&#x2003;</span>लङ्का काण्ड</h3>
+<a id="prachin-autopage-22"></a>
+
+
+<p>
+<span style="width:14pt; display:inline-block"><!----></span>जाम्बवन्त के आदेश से नल-नील दोनों भाइयों ने वानर सेना की सहायता से समुद्र पर पुल बांध दिया। श्री राम ने श्री रामेश्वर की स्थापना करके भगवान शंकर की पूजा की और सेना सहित समुद्र के पार उतर गये।
+</p>
+<div class="center">
+
+<p>
+
+<a href="Building_a_Bridge_to_Sri_Lanka.jpg" target="_blank" ><img
+    src="Building_a_Bridge_to_Sri_Lanka.jpg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+
+<p>
+समुद्र के पार जाकर राम ने डेरा डाला। पुल बंध जाने और राम के समुद्र के पार उतर जाने के समाचार से रावण मन में अत्यंत व्याकुल हुआ। मन्दोदरी के राम से बैर न लेने के लिये समझाने पर भी रावण का अहंकार नहीं गया। इधर राम अपनी वानरसेना के साथ सुबेल पर्वत पर निवास करने लगे। अंगद राम के दूत बन कर लंका में रावण के पास गये और उसे राम के शरण में आने का संदेश दिया किन्तु रावण ने नहीं माना।
+</p>
+
+<p>
+शांति के सारे प्रयास असफल हो जाने पर युद्ध आरम्भ हो गया। लक्ष्मण और मेघनाद के मध्य घोर युद्ध हुआ। शक्तिबाण के वार से लक्ष्मण मूर्छित हो गये। उनके उपचार के लिये हनुमान सुषेण वैद्य को ले आये और संजीवनी लाने के लिये चले गये। गुप्तचर से समाचार मिलने पर रावण ने हनुमान के कार्य में बाधा के लिये कालनेमि को भेजा जिसका हनुमान ने वध कर दिया। औषधि की पहचान न होने के कारण हनुमान पूरे पर्वत को ही उठा कर वापस चले। मार्ग में हनुमान को राक्षस होने के सन्देह में भरत ने बाण मार कर मूर्छित कर दिया परन्तु यथार्थ जानने पर अपने बाण पर बिठा कर वापस लंका भेज दिया। इधर औषधि आने में विलम्ब देख कर राम प्रलाप करने लगे। सही समय पर हनुमान औषधि लेकर आ गये और सुषेण के उपचार से लक्ष्मण स्वस्थ हो गये।
+</p>
+<div class="center">
+
+<p>
+
+<a href="ravan-vadh.jpg" target="_blank" ><img
+    src="ravan-vadh.jpg"
+    class="inlineimage"
+    alt="(image)"
+></a>
+</p>
+</div>
+
+<p>
+रावण ने युद्ध के लिये कुम्भकर्ण को जगाया। कुम्भकर्ण ने भी राम के शरण में जाने की असफल मन्त्रणा दी। युद्ध में कुम्भकर्ण ने राम के हाथों परमगति प्राप्त की। लक्ष्मण ने मेघनाद से युद्ध करके उसका वध कर दिया। राम और रावण के मध्य अनेकों घोर युद्ध हुए और अन्त में रावण राम के हाथों मारा गया। विभीषण को लंका का राज्य सौंप कर राम सीता और लक्ष्मण के साथ पुष्पकविमान पर चढ़ कर अयोध्या के लिये प्रस्थान किया। 
+</p>
+<!--
+...... chapter ���������� ......
+-->
+<h3 id="autosec-25">अध्याय&nbsp;<span class="sectionnumber">7&#x2003;</span>उत्तरकाण्ड</h3>
+<a id="prachin-autopage-25"></a>
+
+
+<p>
+<span style="width:14pt; display:inline-block"><!----></span>सीता, लक्ष्मण और समस्त वानर सेना के साथ राम अयोध्या वापस पहुँचे। राम का भव्य स्वागत हुआ, भरत के साथ सर्वजनों में आनन्द व्याप्त हो गया। वेदों और शिव की स्तुति के साथ राम का राज्याभिषेक हुआ। वानरों की विदाई दी गई। राम ने प्रजा को उपदेश दिया और प्रजा ने कृतज्ञता प्रकट की। फिर प्रजा ने सीता के चरित्र पर आरोप लगाया और राम द्वारा प्रजा के लिए सीता का त्याग किया गया । त्याग के बाद सीता वन चली गईं और महाऋषि वाल्मीकि के आश्रम में रहने लगीं । उस वक़्त वो गर्भ से थीं । समय आने पर चारों भाइयों के दो दो पुत्र हुए। लव कुश के बड़े होने पर वो अपनी माता के लिए न्याय मागने अयोध्या आये परंतु प्रजा की इच्छा के कारण सीता को फिर परीक्षा के लिए बुलाया गया और वे अपनी परीक्षा देकर धरती माता के साथ धरती में समा गयीं । काल के वचन के कारण राम ने लक्ष्मण का त्याग किया और पुत्रों के बड़े होने पर उन सब में राज्य का बंटवारा कर अपने धाम को चल दिये रामराज्य एक आदर्श बन गया। 
+</p>
+
+<p>
+<span style="width:14pt; display:inline-block"><!----></span> कालांतर में साधक को ये सत्य विदित होता है कि यह एक सार्वभौम क्रिया है एवं इसका प्रत्येक 'शब्द' अक्षुण्ण, पारलौकिक एवं अक्षय है जिसका प्रादुर्भाव सामान्यतः अगोचर है। ये सर्वदा गुंजायमान है एवं सिद्धों द्वारा इनके अनवरत तथा अद्भुत कालातीत जप का श्रवण साधक को उपयुक्त काल में होता है। 
+</p>
+
+<a id="prachin-autofile-last"></a>
+</section>
+
+</main>
+
+</div>
+
+</body>
+</html>
